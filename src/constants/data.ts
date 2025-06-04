@@ -30,6 +30,14 @@ export const navItems: NavItem[] = [
     items: [] // No child items
   },
   {
+    title: 'Patients',
+    url: '/dashboard/patients',
+    icon: 'users', // Using the newly added icon
+    shortcut: ['p', 'a'], // Example shortcut, can be adjusted
+    isActive: false,
+    items: [] // No child items
+  },
+  {
     title: 'Account',
     url: '#', // Placeholder as there is no direct link for the parent
     icon: 'billing',
