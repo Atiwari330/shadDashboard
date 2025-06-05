@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { patients } from '@/lib/db/schema';
-import { sql, asc, desc, or, ilike, SQL, eq } from 'drizzle-orm'; // Added eq for potential future use
+import { sql, asc, desc, or, ilike, SQL } from 'drizzle-orm'; // Removed unused 'eq'
 
 // Define allowed sortable columns to prevent arbitrary column sorting
 const allowedSortByFields: Array<keyof typeof patients.$inferSelect> = [
@@ -94,7 +94,8 @@ export async function GET(request: Request) {
       }
     });
   } catch (error) {
-    console.error('Error fetching patients:', error);
+    // console.error('Error fetching patients:', error); // Removed console.error
+    // It's better to have a proper logging service for server-side errors in production
     return NextResponse.json(
       { message: 'Failed to fetch patients' },
       { status: 500 }

@@ -1,7 +1,7 @@
 'use client'; // Required for onClick handlers and state
 
 import { useState, useEffect } from 'react';
-import type { Metadata } from 'next';
+// import type { Metadata } from 'next'; // Metadata is not used due to 'use client'
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
@@ -117,6 +117,12 @@ export default function PatientsPage() {
     setSearchTermInStore('');
   };
 
+  // This useEffect is for logging and can be removed if not needed for debugging
+  // useEffect(() => {
+  //   console.log(`Filters updated for PatientsPage: Search="${searchTerm}", Status="${statusFilter}"`);
+  // }, [searchTerm, statusFilter]);
+
+  // useEffect to sync inputValue if searchTerm is cleared externally (e.g. by clearFiltersInStore)
   useEffect(() => {
     if (searchTerm === '') {
       setInputValue('');
@@ -124,8 +130,9 @@ export default function PatientsPage() {
   }, [searchTerm]);
 
   const handleRefresh = () => {
-    console.log('Refresh button clicked');
-    // SWR will handle revalidation based on key changes or manual mutate calls
+    // console.log('Refresh button clicked'); // Placeholder, SWR handles revalidation
+    // Potentially, if you want a manual SWR retrigger without changing keys:
+    // mutate(swrKey); // Assuming 'mutate' is available from a useSWR hook instance for the table data
   };
 
   const handleEditPatient = (patient: Patient) => {
@@ -254,7 +261,9 @@ export default function PatientsPage() {
                     variant='ghost'
                     size='icon'
                     className='h-8 w-8'
-                    onClick={() => console.log(`Add Task for ${patient.name}`)}
+                    onClick={() => {
+                      /* console.log(`Add Task for ${patient.name}`) */
+                    }} // Placeholder action
                   >
                     <Icons.playlistAdd className='h-4 w-4' />
                     <span className='sr-only'>Add Task</span>
@@ -268,7 +277,9 @@ export default function PatientsPage() {
                     variant='ghost'
                     size='icon'
                     className='h-8 w-8'
-                    onClick={() => console.log(`Send Email to ${patient.name}`)}
+                    onClick={() => {
+                      /* console.log(`Send Email to ${patient.name}`) */
+                    }} // Placeholder action
                   >
                     <Icons.mail className='h-4 w-4' />
                     <span className='sr-only'>Send Email</span>
@@ -282,7 +293,9 @@ export default function PatientsPage() {
                     variant='ghost'
                     size='icon'
                     className='h-8 w-8'
-                    onClick={() => console.log(`Call ${patient.name}`)}
+                    onClick={() => {
+                      /* console.log(`Call ${patient.name}`) */
+                    }} // Placeholder action
                   >
                     <Icons.phone className='h-4 w-4' />
                     <span className='sr-only'>Make Call</span>
@@ -307,9 +320,14 @@ export default function PatientsPage() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() =>
-                    console.log(`View details for patient: ${patient.name}`)
-                  }
+                  onClick={() => {
+                    // Placeholder for navigation or opening a detail view modal
+                    // console.log(`View details for patient: ${patient.name} (ID: ${patient.id})`);
+                    // For now, let's use the Link component behavior by navigating directly
+                    // This item could be removed if the name link is sufficient.
+                    // Or, it could open a modal preview.
+                    // router.push(`/dashboard/patients/${patient.id}`); // If using router
+                  }}
                 >
                   View patient details
                 </DropdownMenuItem>
@@ -365,7 +383,7 @@ export default function PatientsPage() {
                 <DialogTitle>Add New Patient</DialogTitle>
                 <DialogDescription>
                   Fill in the details below to add a new patient. Click save
-                  when you're done.
+                  when you&apos;re done.
                 </DialogDescription>
               </DialogHeader>
               <AddPatientForm
@@ -394,8 +412,8 @@ export default function PatientsPage() {
                 <DialogHeader>
                   <DialogTitle>Edit Patient</DialogTitle>
                   <DialogDescription>
-                    Update the patient's details below. Click save when you're
-                    done.
+                    Update the patient&apos;s details below. Click save when
+                    you&apos;re done.
                   </DialogDescription>
                 </DialogHeader>
                 <EditPatientForm
@@ -439,8 +457,8 @@ export default function PatientsPage() {
                     Are you sure you want to archive this patient?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action will mark patient "{patientToArchive.name}" as
-                    archived. This can usually be undone.
+                    This action will mark patient &quot;{patientToArchive.name}
+                    &quot; as archived. This can usually be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -468,16 +486,16 @@ export default function PatientsPage() {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onSelect={() =>
-                  console.log('Import Patients clicked (placeholder)')
-                }
+                onSelect={() => {
+                  /* console.log('Import Patients clicked (placeholder)') */
+                }}
               >
                 Import Patients
               </DropdownMenuItem>
               <DropdownMenuItem
-                onSelect={() =>
-                  console.log('Export Patients clicked (placeholder)')
-                }
+                onSelect={() => {
+                  /* console.log('Export Patients clicked (placeholder)') */
+                }}
               >
                 Export Patients
               </DropdownMenuItem>
@@ -553,12 +571,13 @@ export default function PatientsPage() {
                 </Button>
                 <Button
                   size='sm'
-                  onClick={() =>
-                    console.log(
-                      'Apply filters button clicked. Status from store:',
-                      statusFilter
-                    )
-                  }
+                  // onClick={() =>
+                  //   console.log(
+                  //     'Apply filters button clicked. Status from store:',
+                  //     statusFilter
+                  //   )
+                  // }
+                  // Apply button might just close the popover if filters apply on change
                 >
                   Apply
                 </Button>

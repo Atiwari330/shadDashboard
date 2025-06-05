@@ -6,13 +6,14 @@ export const metadata: Metadata = {
   description: 'View details for a specific patient.'
 };
 
-interface PatientDetailPageProps {
-  params: {
-    patientId: string;
-  };
-}
+type PageProps = {
+  params: Promise<{ patientId: string }>;
+  // Include searchParams if needed later
+  // searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-export default function PatientDetailPage({ params }: PatientDetailPageProps) {
+export default async function PatientDetailPage(props: PageProps) {
+  const params = await props.params;
   return (
     <div className='flex flex-col space-y-8 p-4 md:p-8'>
       <div className='flex items-center justify-between space-y-2'>

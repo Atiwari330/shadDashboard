@@ -82,7 +82,7 @@ export async function addPatient(
 
     return { message: 'Patient added successfully.' };
   } catch (error) {
-    console.error('Failed to add patient:', error);
+    // console.error('Failed to add patient:', error);
     return {
       message: 'An unexpected error occurred while adding the patient.',
       fields: rawData as Record<string, string>
@@ -186,7 +186,7 @@ export async function editPatient(
 
     return { message: 'Patient updated successfully.' };
   } catch (error) {
-    console.error('Failed to update patient:', error);
+    // console.error('Failed to update patient:', error);
     return {
       message: 'An unexpected error occurred while updating the patient.',
       fields: rawData as Record<string, string>
@@ -237,7 +237,7 @@ export async function archivePatient(
 
     return { message: 'Patient archived successfully.' };
   } catch (error) {
-    console.error('Failed to archive patient:', error);
+    // console.error('Failed to archive patient:', error);
     return {
       message: 'An unexpected error occurred while archiving the patient.',
       id
@@ -297,7 +297,7 @@ export async function updatePatientStatus(
 
     return { message: 'Patient status updated successfully.' };
   } catch (error) {
-    console.error('Failed to update patient status:', error);
+    // console.error('Failed to update patient status:', error);
     return {
       message: 'An unexpected error occurred while updating patient status.',
       id,
@@ -308,6 +308,6 @@ export async function updatePatientStatus(
 
 // Placeholder function can be removed or kept for other tests
 export async function placeholderServerAction() {
-  console.log('Placeholder server action called');
+  // console.log('Placeholder server action called');
   return { message: 'Placeholder action executed' };
 }

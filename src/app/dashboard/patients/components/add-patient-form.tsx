@@ -1,15 +1,15 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useFormState } from 'react-dom'; // useFormStatus is not used if SubmitButton is removed
+import { useEffect, useRef } from 'react'; // Removed useState
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea'; // For potential future use (e.g. notes)
+import { Button } from '@/components/ui/button'; // Button is still used in PopoverTrigger
+// import { Textarea } from '@/components/ui/textarea'; // For potential future use (e.g. notes) - Removed
 import {
   Select,
   SelectContent,
@@ -26,12 +26,10 @@ import { Calendar } from '@/components/ui/calendar';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { toast } from 'sonner'; // Import toast
+import { toast } from 'sonner';
 
-import { addPatient, type AddPatientFormState } from '../actions'; // Path to server action
+import { addPatient, type AddPatientFormState } from '../actions';
 
-// Re-define a Zod schema specifically for client-side validation if it differs or for clarity
-// This should ideally match or be compatible with the server-side AddPatientSchema in actions.ts
 const ClientAddPatientSchema = z.object({
   name: z.string().min(1, { message: 'Name is required.' }),
   email: z
@@ -45,7 +43,6 @@ const ClientAddPatientSchema = z.object({
     required_error: 'Intake date is required.',
     invalid_type_error: 'Intake date must be a valid date.'
   }),
-  // Add other fields as needed, matching the server action schema
   patientIdInternal: z.string().optional(),
   assignedStaffId: z.string().optional(),
   insuranceStatus: z.string().optional(),
@@ -62,21 +59,22 @@ const patientStatusOptions = [
   'Pending',
   'On Hold',
   'Discharged'
-]; // Example statuses
+];
 
 interface AddPatientFormProps {
-  onSuccess?: () => void; // Callback when form submission is successful
+  onSuccess?: () => void;
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type='submit' disabled={pending}>
-      {pending ? <Icons.spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
-      Save Patient
-    </Button>
-  );
-}
+// SubmitButton was removed as the submit is handled by DialogFooter in PatientsPage
+// function SubmitButton() {
+//   const { pending } = useFormStatus();
+//   return (
+//     <Button type='submit' disabled={pending}>
+//       {pending ? <Icons.spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
+//       Save Patient
+//     </Button>
+//   );
+// }
 
 export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
   const initialState: AddPatientFormState = { message: '', issues: [] };
@@ -88,17 +86,16 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting }, // client-side errors from react-hook-form
+    formState: { errors }, // Removed isSubmitting as it's not used
     reset
   } = useForm<ClientAddPatientFormData>({
     resolver: zodResolver(ClientAddPatientSchema),
     defaultValues: {
-      // Set default values for controlled components like Select and Calendar
       name: '',
       email: '',
       phone: '',
       status: '',
-      intakeDate: undefined, // Or new Date() if you want a default
+      intakeDate: undefined,
       patientIdInternal: '',
       assignedStaffId: '',
       insuranceStatus: '',
@@ -108,19 +105,17 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
     }
   });
 
-  const intakeDateValue = watch('intakeDate'); // For Calendar component
+  const intakeDateValue = watch('intakeDate');
 
   useEffect(() => {
     if (formState.message === 'Patient added successfully.') {
-      reset(); // Reset form fields
-      onSuccess?.(); // Call success callback (e.g., to close dialog)
+      reset();
+      onSuccess?.();
     }
-    // Potentially show toast notifications based on formState.message or formState.issues
     if (
       formState.message &&
       formState.message !== 'Patient added successfully.'
     ) {
-      // Show error toast for server-side validation errors or other failures
       toast.error(formState.message, {
         description: formState.issues?.join(', ')
       });
@@ -133,11 +128,10 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
     <form
       ref={formRef}
       action={formAction}
-      onSubmit={handleSubmit(() => formRef.current?.requestSubmit())} // Use RHF for client validation, then submit via action
+      onSubmit={handleSubmit(() => formRef.current?.requestSubmit())}
       className='space-y-4'
-      id='add-patient-form' // For associating external submit button
+      id='add-patient-form'
     >
-      {/* Name Field */}
       <div className='space-y-1'>
         <Label htmlFor='name'>Full Name</Label>
         <Input id='name' {...register('name')} />
@@ -146,7 +140,6 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
         )}
       </div>
 
-      {/* Email Field */}
       <div className='space-y-1'>
         <Label htmlFor='email'>Email Address</Label>
         <Input id='email' type='email' {...register('email')} />
@@ -155,7 +148,6 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
         )}
       </div>
 
-      {/* Phone Field */}
       <div className='space-y-1'>
         <Label htmlFor='phone'>Phone Number</Label>
         <Input id='phone' type='tel' {...register('phone')} />
@@ -164,7 +156,6 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
         )}
       </div>
 
-      {/* Status Field */}
       <div className='space-y-1'>
         <Label htmlFor='status'>Status</Label>
         <Select
@@ -189,7 +180,6 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
         )}
       </div>
 
-      {/* Intake Date Field */}
       <div className='space-y-1'>
         <Label htmlFor='intakeDate'>Intake Date</Label>
         <Popover>
@@ -225,24 +215,6 @@ export function AddPatientForm({ onSuccess }: AddPatientFormProps) {
           <p className='text-sm text-red-500'>{errors.intakeDate.message}</p>
         )}
       </div>
-
-      {/* Server message display (can be removed if toasts are preferred for all messages) */}
-      {/* {formState.message && !formState.issues && !formState.message.includes('success') && (
-        <p className="text-sm text-red-500">
-          {formState.message}
-        </p>
-      )}
-      {formState.issues && formState.issues.length > 0 && (
-         <div className="text-sm text-red-500">
-           <p>Please correct the following errors:</p>
-           <ul className="list-disc pl-5">
-             {formState.issues.map((issue, index) => <li key={index}>{issue}</li>)}
-           </ul>
-         </div>
-      )} */}
-
-      {/* Submit button is now part of the DialogFooter in PatientsPage, associated by form ID */}
-      {/* <SubmitButton /> */}
     </form>
   );
 }

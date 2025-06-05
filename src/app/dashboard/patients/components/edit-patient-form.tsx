@@ -92,8 +92,8 @@ export function EditPatientForm({ patient, onSuccess }: EditPatientFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
-    reset
+    formState: { errors }
+    // reset // Removed unused reset
   } = useForm<ClientEditPatientFormData>({
     resolver: zodResolver(ClientEditPatientSchema),
     defaultValues: {

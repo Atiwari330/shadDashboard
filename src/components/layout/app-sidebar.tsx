@@ -64,8 +64,10 @@ export default function AppSidebar() {
   const { isOpen } = useMediaQuery();
   const { user } = useUser();
   const router = useRouter();
-  const handleSwitchTenant = (_tenantId: string) => {
+  const handleSwitchTenant = (tenantId: string) => {
+    // Removed underscore as it's now used (for logging)
     // Tenant switching functionality would be implemented here
+    console.log('Switching to tenant:', tenantId); // Example usage
   };
 
   const activeTenant = tenants[0];
