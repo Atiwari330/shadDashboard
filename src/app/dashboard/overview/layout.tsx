@@ -15,12 +15,14 @@ export default function OverViewLayout({
   sales,
   pie_stats,
   bar_stats,
-  area_stats
+  area_stats,
+  pipeline
 }: {
   sales: React.ReactNode;
   pie_stats: React.ReactNode;
   bar_stats: React.ReactNode;
   area_stats: React.ReactNode;
+  pipeline: React.ReactNode;
 }) {
   return (
     <PageContainer>
@@ -122,6 +124,8 @@ export default function OverViewLayout({
             </CardFooter>
           </Card>
         </div>
+        {/* Revenue Pipeline - Full Width */}
+        <div className='col-span-full'>{pipeline}</div>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7'>
           <div className='col-span-4'>{bar_stats}</div>
           <div className='col-span-4 md:col-span-3'>
