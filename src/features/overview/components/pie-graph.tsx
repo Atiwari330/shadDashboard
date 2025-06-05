@@ -20,31 +20,31 @@ import {
 } from '@/components/ui/chart';
 
 const chartData = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--primary)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--primary-light)' },
-  { browser: 'firefox', visitors: 287, fill: 'var(--primary-lighter)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--primary-dark)' },
+  { browser: 'provider_referral', visitors: 275, fill: 'var(--primary)' },
+  { browser: 'insurance', visitors: 200, fill: 'var(--primary-light)' },
+  { browser: 'online_search', visitors: 287, fill: 'var(--primary-lighter)' },
+  { browser: 'social_media', visitors: 173, fill: 'var(--primary-dark)' },
   { browser: 'other', visitors: 190, fill: 'var(--primary-darker)' }
 ];
 
 const chartConfig = {
   visitors: {
-    label: 'Visitors'
+    label: 'Inquiries'
   },
-  chrome: {
-    label: 'Chrome',
+  provider_referral: {
+    label: 'Provider Referral',
     color: 'var(--primary)'
   },
-  safari: {
-    label: 'Safari',
+  insurance: {
+    label: 'Insurance',
     color: 'var(--primary)'
   },
-  firefox: {
-    label: 'Firefox',
+  online_search: {
+    label: 'Online Search',
     color: 'var(--primary)'
   },
-  edge: {
-    label: 'Edge',
+  social_media: {
+    label: 'Social Media',
     color: 'var(--primary)'
   },
   other: {
@@ -61,12 +61,12 @@ export function PieGraph() {
   return (
     <Card className='@container/card'>
       <CardHeader>
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
+        <CardTitle>Referral Sources Distribution</CardTitle>
         <CardDescription>
           <span className='hidden @[540px]/card:block'>
-            Total visitors by browser for the last 6 months
+            Patient inquiry sources for the last 6 months
           </span>
-          <span className='@[540px]/card:hidden'>Browser distribution</span>
+          <span className='@[540px]/card:hidden'>Referral sources</span>
         </CardDescription>
       </CardHeader>
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
@@ -76,29 +76,33 @@ export function PieGraph() {
         >
           <PieChart>
             <defs>
-              {['chrome', 'safari', 'firefox', 'edge', 'other'].map(
-                (browser, index) => (
-                  <linearGradient
-                    key={browser}
-                    id={`fill${browser}`}
-                    x1='0'
-                    y1='0'
-                    x2='0'
-                    y2='1'
-                  >
-                    <stop
-                      offset='0%'
-                      stopColor='var(--primary)'
-                      stopOpacity={1 - index * 0.15}
-                    />
-                    <stop
-                      offset='100%'
-                      stopColor='var(--primary)'
-                      stopOpacity={0.8 - index * 0.15}
-                    />
-                  </linearGradient>
-                )
-              )}
+              {[
+                'provider_referral',
+                'insurance',
+                'online_search',
+                'social_media',
+                'other'
+              ].map((browser, index) => (
+                <linearGradient
+                  key={browser}
+                  id={`fill${browser}`}
+                  x1='0'
+                  y1='0'
+                  x2='0'
+                  y2='1'
+                >
+                  <stop
+                    offset='0%'
+                    stopColor='var(--primary)'
+                    stopOpacity={1 - index * 0.15}
+                  />
+                  <stop
+                    offset='100%'
+                    stopColor='var(--primary)'
+                    stopOpacity={0.8 - index * 0.15}
+                  />
+                </linearGradient>
+              ))}
             </defs>
             <ChartTooltip
               cursor={false}
@@ -137,7 +141,7 @@ export function PieGraph() {
                           y={(viewBox.cy || 0) + 24}
                           className='fill-muted-foreground text-sm'
                         >
-                          Total Visitors
+                          Total Inquiries
                         </tspan>
                       </text>
                     );
@@ -150,7 +154,7 @@ export function PieGraph() {
       </CardContent>
       <CardFooter className='flex-col gap-2 text-sm'>
         <div className='flex items-center gap-2 leading-none font-medium'>
-          Chrome leads with{' '}
+          Provider Referral leads with{' '}
           {((chartData[0].visitors / totalVisitors) * 100).toFixed(1)}%{' '}
           <IconTrendingUp className='h-4 w-4' />
         </div>
